@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//  SignUpViewController.swift
 //  instagram_clone
 //
 //  Created by Nabil on 10/24/18.
@@ -9,13 +9,13 @@
 import UIKit
 import Parse
 
-class LoginViewController: UIViewController {
+class SignUpViewController: UIViewController {
 
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var email: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.setGradientBackground(colorOne: Colors.red, colorTwo: Colors.orange)
 
         // Do any additional setup after loading the view.
     }
@@ -25,18 +25,31 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func onLogin(_ sender: Any) {
-        PFUser.logInWithUsername(inBackground: username.text!, password: password.text!, block: { (user: PFUser?, error) in
-            if user != nil {
-                print("You're logged in")
+    func registerUser() {
+        // initialize a user object
+        let newUser = PFUser()
+
+        // set user properties
+        newUser.username = username.text
+        newUser.email = email.text
+        newUser.password = password.text
+
+        // call sign up function on the object
+        newUser.signUpInBackground { (success: Bool, error: Error?) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("User Registered successfully")
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
+
             }
-        })
+        }
     }
-    
-   
-    
-   
+
+    @IBAction func onSignUp(_ sender: Any) {
+        registerUser()
+
+    }
     /*
     // MARK: - Navigation
 
